@@ -43,7 +43,6 @@ var CKBUILDER_CONFIG = {
 		enterkey: 1,
 		entities: 1,
 		filebrowser: 1,
-		font: 1,
 		format: 1,
 		htmlwriter: 1,
 		image: 1,
