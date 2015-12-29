@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
@@ -7,7 +7,7 @@
 
 ( function() {
 	CKEDITOR.plugins.add( 'filetools', {
-		lang: 'cs,da,de,en,eo,fr,gl,it,ko,ku,nb,nl,pl,pt-br,ru,sv,tr,zh,zh-cn', // %REMOVE_LINE_CORE%
+		lang: 'cs,da,de,en,eo,eu,fr,gl,id,it,ko,ku,nb,nl,pl,pt-br,ru,sv,tr,ug,uk,zh,zh-cn', // %REMOVE_LINE_CORE%
 
 		beforeInit: function( editor ) {
 			/**
@@ -46,6 +46,10 @@
 					formData = new FormData();
 
 				formData.append( 'upload', fileLoader.file, fileLoader.fileName );
+
+				// Append token preventing CSRF attacks.
+				formData.append( 'ckCsrfToken', CKEDITOR.tools.getCsrfToken() );
+
 				fileLoader.xhr.send( formData );
 			}, null, null, 999 );
 
@@ -88,7 +92,7 @@
 				} catch ( err ) {
 					// Response parsing error.
 					data.message = fileLoader.lang.filetools.responseError;
-					window.console && window.console.log( xhr.responseText );
+					CKEDITOR.warn( 'filetools-response-error', { responseText: xhr.responseText } );
 
 					evt.cancel();
 				}
@@ -276,6 +280,7 @@
 		}
 
 		this.uploaded = 0;
+		this.uploadTotal = null;
 
 		this.status = 'created';
 
@@ -341,6 +346,23 @@
 	 *
 	 * @readonly
 	 * @property {Number} total
+	 */
+
+	/**
+	 * The total size of upload data in bytes.
+	 * If the `xhr.upload` object is present, this value will indicate the total size of the request payload, not only the file
+	 * size itself. If the `xhr.upload` object is not available and the real upload size cannot be obtained, this value will
+	 * be equal to {@link #total}. It has a `null` value until the upload size is known.
+	 *
+	 * 		loader.on( 'update', function() {
+	 * 			// Wait till uploadTotal is present.
+	 * 			if ( loader.uploadTotal ) {
+	 * 				console.log( 'uploadTotal: ' + loader.uploadTotal );
+	 * 			}
+	 * 		});
+	 *
+	 * @readonly
+	 * @property {Number} uploadTotal
 	 */
 
 	/**
@@ -518,22 +540,43 @@
 				xhr.abort();
 			};
 
-			xhr.onabort = function() {
-				loader.changeStatus( 'abort' );
-			};
+			xhr.onerror = onError;
+			xhr.onabort = onAbort;
 
-			xhr.onerror = function() {
-				loader.message = loader.lang.filetools.networkError;
-				loader.changeStatus( 'error' );
-			};
+			// #13533 - When xhr.upload is present attach onprogress, onerror and onabort functions to get actual upload
+			// information.
+			if ( xhr.upload ) {
+				xhr.upload.onprogress = function( evt ) {
+					if ( evt.lengthComputable ) {
+						// Set uploadTotal with correct data.
+						if ( !loader.uploadTotal ) {
+							loader.uploadTotal = evt.total;
+						}
+						loader.uploaded = evt.loaded;
+						loader.update();
+					}
+				};
 
-			xhr.onprogress = function( evt ) {
-				loader.uploaded = evt.loaded;
+				xhr.upload.onerror = onError;
+				xhr.upload.onabort = onAbort;
+
+			} else {
+				// #13533 - If xhr.upload is not supported - fire update event anyway and set uploadTotal to file size.
+				loader.uploadTotal = loader.total;
 				loader.update();
-			};
+			}
 
 			xhr.onload = function() {
-				loader.uploaded = loader.total;
+				// #13433 - Call update at the end of the upload. When xhr.upload object is not supported there will be
+				// no update events fired during the whole process.
+				loader.update();
+
+				// #13433 - Check if loader was not aborted during last update.
+				if ( loader.status == 'abort' ) {
+					return;
+				}
+
+				loader.uploaded = loader.uploadTotal;
 
 				if ( xhr.status < 200 || xhr.status > 299 ) {
 					loader.message = loader.lang.filetools[ 'httpError' + xhr.status ];
@@ -563,6 +606,24 @@
 					}
 				}
 			};
+
+			function onError() {
+				// Prevent changing status twice, when HHR.error and XHR.upload.onerror could be called together.
+				if ( loader.status == 'error' ) {
+					return;
+				}
+
+				loader.message = loader.lang.filetools.networkError;
+				loader.changeStatus( 'error' );
+			}
+
+			function onAbort() {
+				// Prevent changing status twice, when HHR.onabort and XHR.upload.onabort could be called together.
+				if ( loader.status == 'abort' ) {
+					return;
+				}
+				loader.changeStatus( 'abort' );
+			}
 		},
 
 		/**
