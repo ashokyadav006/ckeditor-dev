@@ -4,11 +4,6 @@
 
         CKEDITOR.dialog.add(pluginName, this.path + 'dialogs/acronym.js');
 
-        /*editor.addCommand(pluginName, {
-           exec: function (editor) {
-               $("#WitAcronymHiddenDOM").click();
-           }
-       });*/
 
         editor.addCommand(pluginName, new CKEDITOR.dialogCommand(pluginName));
 

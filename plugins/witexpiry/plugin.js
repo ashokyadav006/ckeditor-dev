@@ -3,7 +3,7 @@
         var pluginName = 'witexpiry';
         editor.addCommand(pluginName, {
            exec: function (editor) {
-               $("#WitExpiryHiddenDOM").click();
+               document.getElementById("WitExpiryHiddenDOM").click();
            }
         });
         editor.ui.addButton('Witexpiry', {

@@ -17,12 +17,9 @@
                         acrospan.setAttribute('style', 'color:rgb(236, 27, 82)');
                         acrospan.setAttribute('var', acronymText );
                         acrospan.setAttribute('contenteditable', 'false' );
-                        acrospan.setText(zws +'[' + acronymText + ']'+zws);
+                        //acrospan.setText(zws +'[' + acronymText + ']'+zws);
+                        acrospan.setText('[' + acronymText + '] ');
                         editor.insertElement(acrospan);
-                        //Adding due to issue WIT-1925
-                        var emptyItem = editor.document.createElement('span');
-                        emptyItem.setText(' ');
-                        editor.insertElement(emptyItem);
                     }
 
             },
