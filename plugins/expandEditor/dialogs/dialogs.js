@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     var zws = '\u200B';
     var AcroData;
     var acronym = function (editor) {
@@ -19,10 +19,6 @@
                         acrospan.setAttribute('contenteditable', 'false' );
                         acrospan.setText(zws +'[' + acronymText + ']'+zws);
                         editor.insertElement(acrospan);
-                        //Adding due to issue WIT-1925
-                        var emptyItem = editor.document.createElement('span');
-                        emptyItem.setText(' ');
-                        editor.insertElement(emptyItem);
                     }
 
             },

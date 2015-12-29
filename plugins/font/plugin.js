@@ -193,7 +193,7 @@
             name = element.getName();
 
         // If the element name is the same as the style name.
-        if (typeof style.element == 'string' ? name == style.element : name in style.element) {
+        //if (typeof style.element == 'string' ? name == style.element : name in style.element) {
             // If no attributes are defined in the element.
             if (!fullMatch && !element.hasAttributes())
                 return true;
@@ -220,7 +220,7 @@
             } else {
                 return true;
             }
-        }
+        //}
 
         return false;
     };
@@ -322,8 +322,10 @@
  * @cfg {String} [font_names=see source]
  * @member CKEDITOR.config
  */
-CKEDITOR.config.font_names = 'Calibri/Calibri;'+
-	'Arial/Arial, Helvetica, sans-serif;' +
+CKEDITOR.config.font_names = 'Arial/Arial, Helvetica, sans-serif;' +
+    'Calibri/Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;'+
+    'CitrixSans-Regular;'+
+    'CitrixSans-Italic;'+
     'Comic Sans MS/Comic Sans MS, cursive;' +
     'Courier New/Courier New, Courier, monospace;' +
     'Georgia/Georgia, serif;' +
@@ -391,7 +393,7 @@ CKEDITOR.config.font_style = {
  * @cfg {String} [fontSize_sizes=see source]
  * @member CKEDITOR.config
  */
-CKEDITOR.config.fontSize_sizes = '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;72/72px';
+CKEDITOR.config.fontSize_sizes = '8/8pt;9/9pt;10/10pt;11/11pt;12/12pt;14/14pt;16/16pt;18/18pt;20/20pt;22/22pt;24/24pt;26/26pt;28/28pt;36/36pt;48/48pt;72/72pt';
 
 /**
  * The text to be displayed in the Font Size combo is none of the available

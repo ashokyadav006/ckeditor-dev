@@ -4,7 +4,6 @@
         editor.addCommand(pluginName, {
            exec: function (editor) {
                document.getElementById("insertImagePlugin").click();
-               console.log("Call insert image function !");
            }
         });
         editor.ui.addButton('Wittyupload', {

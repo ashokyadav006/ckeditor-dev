@@ -44,6 +44,7 @@ var CKBUILDER_CONFIG = {
 		entities: 1,
 		filebrowser: 1,
 		format: 1,
+		font: 1,
 		htmlwriter: 1,
 		image: 1,
 		indentlist: 1,
