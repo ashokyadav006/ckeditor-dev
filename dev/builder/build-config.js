@@ -6,7 +6,7 @@
 /* exported CKBUILDER_CONFIG */
 
 var CKBUILDER_CONFIG = {
-	skin: 'bootstrapck',
+	skin: 'flat',
 	ignore: [
 		'bender.js',
 		'.bender',
@@ -37,22 +37,27 @@ var CKBUILDER_CONFIG = {
 		colorbutton: 1,
 		contextmenu: 1,
 		dialog: 1,
-		dialogui: 1,
 		dialogadvtab: 1,
+		dialogui: 1,
 		divarea: 1,
 		enterkey: 1,
 		entities: 1,
 		filebrowser: 1,
-		format: 1,
+		filetools: 1,
 		font: 1,
+		format: 1,
 		htmlwriter: 1,
 		image: 1,
-		indentlist: 1,
 		indentblock: 1,
+		indentlist: 1,
 		justify: 1,
+		lineheight: 1,
+		lineutils: 1,
 		link: 1,
 		list: 1,
 		maximize: 1,
+		notification: 1,
+		notificationaggregator: 1,
 		oembed: 1,
 		pastefromword: 1,
 		pastetext: 1,
@@ -62,7 +67,10 @@ var CKBUILDER_CONFIG = {
 		tabletools: 1,
 		toolbar: 1,
 		undo: 1,
-		wittyupload: 1,
-		witexpiry: 1
+		uploadimage:1,
+		uploadwidget: 1,
+		widget: 1,
+		witexpiry: 1,
+		wittyupload: 1
 	}
 };
