@@ -70,7 +70,6 @@ var CKBUILDER_CONFIG = {
 		uploadimage:1,
 		uploadwidget: 1,
 		widget: 1,
-		witexpiry: 1,
 		wittyupload: 1
 	}
 };
