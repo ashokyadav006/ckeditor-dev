@@ -14,7 +14,7 @@
                 this.element.setAttribute('var', acroText);
                 this.element.setText('['+acroText+']');
             },
-            template: 
+            template:
                 '<span id="var_acronym" style="color:rgb(236, 27, 82)">'+
                 '</span>',
             dialog: pluginName,
@@ -34,8 +34,8 @@
             }
         });
 
-        editor.ui.addButton('Acronym', {
-            label: 'Create Acronym',
+        editor.ui.addButton('Variable', {
+            label: 'Create Variable',
             command: pluginName,
             icon: this.path + 'acronym.png'
         });

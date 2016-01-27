@@ -3,8 +3,8 @@
     //var AcroData;
     var acronym = function (editor) {
         return {
-            title: 'Add acronym',
-            id: 'acronymValue',
+            title: 'Add variable',
+            id: 'variableValue',
             minWidth: 300,
             minHeight: 100,
             resizable: CKEDITOR.DIALOG_RESIZE_NONE,
@@ -17,9 +17,9 @@
                             children: [{
                                     type: 'text',
                                     id: 'acronymText',
-                                    label: 'Acronym',
+                                    label: 'Variable',
                                     labelLayout: 'horizontal',
-                                    validate: CKEDITOR.dialog.validate.notEmpty('You did not fill in an acronym!'),
+                                    validate: CKEDITOR.dialog.validate.notEmpty('You did not fill in an variable!'),
                                     setup: function(widget) {
                                         this.setValue(widget.data.acroText);
                                     },
