@@ -74,7 +74,7 @@
         });
 
         editor.ui.addButton('Wittyupload', {
-            label: 'Wittyupload',
+            label: 'Add image',
             command: pluginName,
             icon: this.path + 'image.png'
         });

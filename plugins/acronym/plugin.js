@@ -34,7 +34,7 @@
             }
         });
 
-        editor.ui.addButton('Variable', {
+        editor.ui.addButton('Acronym', {
             label: 'Create Variable',
             command: pluginName,
             icon: this.path + 'acronym.png'
