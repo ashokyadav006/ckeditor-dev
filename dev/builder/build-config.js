@@ -32,6 +32,7 @@ var CKBUILDER_CONFIG = {
 	],
 	plugins: {
 		acronym: 1,
+		annotation: 1,
 		basicstyles: 1,
 		clipboard: 1,
 		colorbutton: 1,

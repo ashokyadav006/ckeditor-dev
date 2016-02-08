@@ -595,6 +595,11 @@
 						}
 					},
 					{
+						id:'sizeInfo',
+						type: 'html',
+						html: '<span style="font-size: 14px;">All measurments are in <strong style="font-size: 14px">pixels</strong>.</span>'
+					},
+					{
 						type: 'hbox',
 						children: [ {
 							id: 'basic',
@@ -626,23 +631,28 @@
 										commit: function( type, element ) {
 											var value = this.getValue();
 											if ( type == IMAGE ) {
-												if ( value && editor.activeFilter.check( 'img{width,height}' ) )
+												if ( value && editor.activeFilter.check( 'img{width,height}' ) ) {
 													element.setStyle( 'width', CKEDITOR.tools.cssLength( value ) );
+													element.setAttribute( 'width', value );
+												}
 												else
 													element.removeStyle( 'width' );
 
-												element.removeAttribute( 'width' );
+												//element.removeAttribute( 'width' );
 											} else if ( type == PREVIEW ) {
 												var aMatch = value.match( regexGetSize );
 												if ( !aMatch ) {
 													var oImageOriginal = this.getDialog().originalElement;
-													if ( oImageOriginal.getCustomData( 'isReady' ) == 'true' )
+													if ( oImageOriginal.getCustomData( 'isReady' ) == 'true' ) {
 														element.setStyle( 'width', oImageOriginal.$.width + 'px' );
+														element.setAttribute( 'width', oImageOriginal.$.width );
+													}
 												} else {
 													element.setStyle( 'width', CKEDITOR.tools.cssLength( value ) );
+													element.setAttribute( 'width', value  );
 												}
 											} else if ( type == CLEANUP ) {
-												element.removeAttribute( 'width' );
+												//element.removeAttribute( 'width' );
 												element.removeStyle( 'width' );
 											}
 										}
@@ -667,23 +677,28 @@
 										commit: function( type, element ) {
 											var value = this.getValue();
 											if ( type == IMAGE ) {
-												if ( value && editor.activeFilter.check( 'img{width,height}' ) )
+												if ( value && editor.activeFilter.check( 'img{width,height}' ) ) {
 													element.setStyle( 'height', CKEDITOR.tools.cssLength( value ) );
+													element.setAttribute( 'height', value );
+												}
 												else
 													element.removeStyle( 'height' );
 
-												element.removeAttribute( 'height' );
+												//element.removeAttribute( 'height' );
 											} else if ( type == PREVIEW ) {
 												var aMatch = value.match( regexGetSize );
 												if ( !aMatch ) {
 													var oImageOriginal = this.getDialog().originalElement;
-													if ( oImageOriginal.getCustomData( 'isReady' ) == 'true' )
-														element.setStyle( 'height', oImageOriginal.$.height + 'px' );
+													if ( oImageOriginal.getCustomData( 'isReady' ) == 'true' ) {
+														element.setStyle( 'height' );
+														element.setAttribute( 'height', oImageOriginal.$.height  );
+													}
 												} else {
 													element.setStyle( 'height', CKEDITOR.tools.cssLength( value ) );
+													element.setAttribute( 'height', value  );
 												}
 											} else if ( type == CLEANUP ) {
-												element.removeAttribute( 'height' );
+												//element.removeAttribute( 'height' );
 												element.removeStyle( 'height' );
 											}
 										}
@@ -968,9 +983,7 @@
 										'<a href="javascript:void(0)" target="_blank" onclick="return false;" id="' + previewLinkId + '">' +
 										'<img id="' + previewImageId + '" alt="" /></a>' +
 									// jscs:disable maximumLineLength
-										( editor.config.image_previewText || 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. ' +
-											'Maecenas feugiat consequat diam. Maecenas metus. Vivamus diam purus, cursus a, commodo non, facilisis vitae, ' +
-											'nulla. Aenean dictum lacinia tortor. Nunc iaculis, nibh non iaculis aliquam, orci felis euismod neque, sed ornare massa mauris sed velit. Nulla pretium mi et risus. Fusce mi pede, tempor id, cursus ac, ullamcorper nec, enim. Sed tortor. Curabitur molestie. Duis velit augue, condimentum at, ultrices a, luctus ut, orci. Donec pellentesque egestas eros. Integer cursus, augue in cursus faucibus, eros pede bibendum sem, in tempus tellus justo quis ligula. Etiam eget tortor. Vestibulum rutrum, est ut placerat elementum, lectus nisl aliquam velit, tempor aliquam eros nunc nonummy metus. In eros metus, gravida a, gravida sed, lobortis id, turpis. Ut ultrices, ipsum at venenatis fringilla, sem nulla lacinia tellus, eget aliquet turpis mauris non enim. Nam turpis. Suspendisse lacinia. Curabitur ac tortor ut ipsum egestas elementum. Nunc imperdiet gravida mauris.' ) +
+										( editor.config.image_previewText || ' ') +
 									// jscs:enable maximumLineLength
 									'</td></tr></table></div></div>'
 							} ]
@@ -1000,6 +1013,9 @@
 							if ( type == LINK ) {
 								if ( this.getValue() || this.isChanged() ) {
 									var url = this.getValue();
+									if(url.indexOf('://') == -1) {
+										url = 'http://'+url;
+									}
 									element.data( 'cke-saved-href', url );
 									element.setAttribute( 'href', url );
 
