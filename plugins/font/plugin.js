@@ -1,38 +1,38 @@
 ﻿/**
- * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
-(function() {
-    function addCombo(editor, comboName, styleType, lang, entries, defaultLabel, styleDefinition, order) {
+( function() {
+    function addCombo( editor, comboName, styleType, lang, entries, defaultLabel, styleDefinition, order ) {
         var config = editor.config,
-            style = new CKEDITOR.style(styleDefinition);
+            style = new CKEDITOR.style( styleDefinition );
 
         // Gets the list of fonts from the settings.
-        var names = entries.split(';'),
+        var names = entries.split( ';' ),
             values = [];
 
         // Create style objects for all fonts.
         var styles = {};
-        for (var i = 0; i < names.length; i++) {
-            var parts = names[i];
+        for ( var i = 0; i < names.length; i++ ) {
+            var parts = names[ i ];
 
-            if (parts) {
-                parts = parts.split('/');
+            if ( parts ) {
+                parts = parts.split( '/' );
 
                 var vars = {},
-                    name = names[i] = parts[0];
+                    name = names[ i ] = parts[ 0 ];
 
-                vars[styleType] = values[i] = parts[1] || name;
+                vars[ styleType ] = values[ i ] = parts[ 1 ] || name;
 
-                styles[name] = new CKEDITOR.style(styleDefinition, vars);
-                styles[name]._.definition.name = name;
+                styles[ name ] = new CKEDITOR.style( styleDefinition, vars );
+                styles[ name ]._.definition.name = name;
             } else {
-                names.splice(i--, 1);
+                names.splice( i--, 1 );
             }
         }
 
-        editor.ui.addRichCombo(comboName, {
+        editor.ui.addRichCombo( comboName, {
             label: lang.label,
             title: lang.panelTitle,
             toolbar: 'styles,' + order,
@@ -40,123 +40,120 @@
             requiredContent: style,
 
             panel: {
-                css: [CKEDITOR.skin.getPath('editor')].concat(config.contentsCss),
+                css: [ CKEDITOR.skin.getPath( 'editor' ) ].concat( config.contentsCss ),
                 multiSelect: false,
-                attributes: {
-                    'aria-label': lang.panelTitle
-                }
+                attributes: { 'aria-label': lang.panelTitle }
             },
 
             init: function() {
-                this.startGroup(lang.panelTitle);
+                this.startGroup( lang.panelTitle );
 
-                for (var i = 0; i < names.length; i++) {
-                    var name = names[i];
+                for ( var i = 0; i < names.length; i++ ) {
+                    var name = names[ i ];
 
                     // Add the tag entry to the panel list.
-                    this.add(name, styles[name].buildPreview(), name);
+                    this.add( name, styles[ name ].buildPreview(), name );
                 }
             },
 
-            onClick: function(value) {
+            onClick: function( value ) {
                 editor.focus();
-                editor.fire('saveSnapshot');
+                editor.fire( 'saveSnapshot' );
 
                 var previousValue = this.getValue(),
-                    style = styles[value];
+                    style = styles[ value ];
 
                 // When applying one style over another, first remove the previous one (#12403).
                 // NOTE: This is only a temporary fix. It will be moved to the styles system (#12687).
-                if (previousValue && value != previousValue) {
-                    var previousStyle = styles[previousValue],
-                        range = editor.getSelection().getRanges()[0];
+                if ( previousValue && value != previousValue ) {
+                    var previousStyle = styles[ previousValue ],
+                        range = editor.getSelection().getRanges()[ 0 ];
 
                     // If the range is collapsed we can't simply use the editor.removeStyle method
                     // because it will remove the entire element and we want to split it instead.
-                    if (range.collapsed) {
+                    if ( range.collapsed ) {
                         var path = editor.elementPath(),
                             // Find the style element.
-                            matching = path.contains(function(el) {
-                                return previousStyle.checkElementRemovable(el);
-                            });
+                            matching = path.contains( function( el ) {
+                                return previousStyle.checkElementRemovable( el );
+                            } );
 
-                        if (matching) {
-                            var startBoundary = range.checkBoundaryOfElement(matching, CKEDITOR.START),
-                                endBoundary = range.checkBoundaryOfElement(matching, CKEDITOR.END),
+                        if ( matching ) {
+                            var startBoundary = range.checkBoundaryOfElement( matching, CKEDITOR.START ),
+                                endBoundary = range.checkBoundaryOfElement( matching, CKEDITOR.END ),
                                 node, bm;
 
                             // If we are at both boundaries it means that the element is empty.
                             // Remove it but in a way that we won't lose other empty inline elements inside it.
                             // Example: <p>x<span style="font-size:48px"><em>[]</em></span>x</p>
                             // Result: <p>x<em>[]</em>x</p>
-                            if (startBoundary && endBoundary) {
+                            if ( startBoundary && endBoundary ) {
                                 bm = range.createBookmark();
                                 // Replace the element with its children (TODO element.replaceWithChildren).
-                                while ((node = matching.getFirst())) {
-                                    node.insertBefore(matching);
+                                while ( ( node = matching.getFirst() ) ) {
+                                    node.insertBefore( matching );
                                 }
                                 matching.remove();
-                                range.moveToBookmark(bm);
+                                range.moveToBookmark( bm );
 
-                                // If we are at the boundary of the style element, just move out.
-                            } else if (startBoundary) {
-                                range.moveToPosition(matching, CKEDITOR.POSITION_BEFORE_START);
-                            } else if (endBoundary) {
-                                range.moveToPosition(matching, CKEDITOR.POSITION_AFTER_END);
+                            // If we are at the boundary of the style element, just move out.
+                            } else if ( startBoundary ) {
+                                range.moveToPosition( matching, CKEDITOR.POSITION_BEFORE_START );
+                            } else if ( endBoundary ) {
+                                range.moveToPosition( matching, CKEDITOR.POSITION_AFTER_END );
                             } else {
                                 // Split the element and clone the elements that were in the path
                                 // (between the startContainer and the matching element)
                                 // into the new place.
-                                range.splitElement(matching);
-                                range.moveToPosition(matching, CKEDITOR.POSITION_AFTER_END);
-                                cloneSubtreeIntoRange(range, path.elements.slice(), matching);
+                                range.splitElement( matching );
+                                range.moveToPosition( matching, CKEDITOR.POSITION_AFTER_END );
+                                cloneSubtreeIntoRange( range, path.elements.slice(), matching );
                             }
 
-                            editor.getSelection().selectRanges([range]);
+                            editor.getSelection().selectRanges( [ range ] );
                         }
                     } else {
-                        editor.removeStyle(previousStyle);
+                        editor.removeStyle( previousStyle );
                     }
                 }
 
-                editor[previousValue == value ? 'removeStyle' : 'applyStyle'](style);
+                editor[ previousValue == value ? 'removeStyle' : 'applyStyle' ]( style );
 
-                editor.fire('saveSnapshot');
+                editor.fire( 'saveSnapshot' );
             },
 
             onRender: function() {
-                editor.on('selectionChange', function(ev) {
+                editor.on( 'selectionChange', function( ev ) {
                     var currentValue = this.getValue();
 
                     var elementPath = ev.data.path,
-                        elements = elementPath.elements,
-                        styleName;
+                        elements = elementPath.elements;
 
                     // For each element into the elements path.
-                    for (var i = 0, element; i < elements.length; i++) {
-                        element = elements[i];
+                    for ( var i = 0, element; i < elements.length; i++ ) {
+                        element = elements[ i ];
 
                         // Check if the element is removable by any of
                         // the styles.
-                        for (var value in styles) {
-                            if (checkElementMatch(styles[value], element, true, editor)) {
-                                if (value != currentValue)
-                                    this.setValue(value);
+                        for ( var value in styles ) {
+                            if ( styles[ value ].checkElementMatch( element, true, editor ) ) {
+                                if ( value != currentValue )
+                                    this.setValue( value );
                                 return;
                             }
                         }
                     }
 
                     // If no styles match, just empty it.
-                    this.setValue('', defaultLabel);
-                }, this);
+                    this.setValue( '', defaultLabel );
+                }, this );
             },
 
             refresh: function() {
-                if (!editor.activeFilter.check(style))
-                    this.setState(CKEDITOR.TRISTATE_DISABLED);
+                if ( !editor.activeFilter.check( style ) )
+                    this.setState( CKEDITOR.TRISTATE_DISABLED );
             }
-        });
+        } );
     }
 
     // Clones the subtree between subtreeStart (exclusive) and the
@@ -166,141 +163,36 @@
     // @param {CKEDITOR.dom.element[]} elements Elements path in the standard order: leaf -> root.
     // @param {CKEDITOR.dom.element/null} substreeStart The start of the subtree.
     // If null, then the leaf belongs to the subtree.
-    function cloneSubtreeIntoRange(range, elements, subtreeStart) {
+    function cloneSubtreeIntoRange( range, elements, subtreeStart ) {
         var current = elements.pop();
-        if (!current) {
+        if ( !current ) {
             return;
         }
         // Rewind the elements array up to the subtreeStart and then start the real cloning.
-        if (subtreeStart) {
-            return cloneSubtreeIntoRange(range, elements, current.equals(subtreeStart) ? null : subtreeStart);
+        if ( subtreeStart ) {
+            return cloneSubtreeIntoRange( range, elements, current.equals( subtreeStart ) ? null : subtreeStart );
         }
 
         var clone = current.clone();
-        range.insertNode(clone);
-        range.moveToPosition(clone, CKEDITOR.POSITION_AFTER_START);
+        range.insertNode( clone );
+        range.moveToPosition( clone, CKEDITOR.POSITION_AFTER_START );
 
-        cloneSubtreeIntoRange(range, elements);
-    };
+        cloneSubtreeIntoRange( range, elements );
+    }
 
-    function checkElementMatch(style, element, fullMatch) {
-        var def = style._.definition;
-
-        if (!element || !def.ignoreReadonly && element.isReadOnly())
-            return false;
-
-        var attribs,
-            name = element.getName();
-
-        // If the element name is the same as the style name.
-        //if (typeof style.element == 'string' ? name == style.element : name in style.element) {
-            // If no attributes are defined in the element.
-            if (!fullMatch && !element.hasAttributes())
-                return true;
-
-            attribs = getAttributesForComparison(def);
-
-            if (attribs._length) {
-                for (var attName in attribs) {
-                    if (attName == '_length')
-                        continue;
-
-                    var elementAttr = element.getAttribute(attName) || '';
-
-                    // Special treatment for 'style' attribute is required.
-                    if (attName == 'style' ? compareCssText(attribs[attName], elementAttr) : attribs[attName] == elementAttr) {
-                        if (!fullMatch)
-                            return true;
-                    } else if (fullMatch) {
-                        return false;
-                    }
-                }
-                if (fullMatch)
-                    return true;
-            } else {
-                return true;
-            }
-        //}
-
-        return false;
-    };
-
-    // Returns an object that can be used for style matching comparison.
-    // Attributes names and values are all lowercased, and the styles get
-    // merged with the style attribute.
-    function getAttributesForComparison(styleDefinition) {
-        // If we have already computed it, just return it.
-        var attribs = styleDefinition._AC;
-        if (attribs)
-            return attribs;
-
-        attribs = {};
-
-        var length = 0;
-
-        // Loop through all defined attributes.
-        var styleAttribs = styleDefinition.attributes;
-        if (styleAttribs) {
-            for (var styleAtt in styleAttribs) {
-                length++;
-                attribs[styleAtt] = styleAttribs[styleAtt];
-            }
-        }
-
-        // Includes the style definitions.
-        var styleText = CKEDITOR.style.getStyleText(styleDefinition);
-        if (styleText) {
-            if (!attribs.style)
-                length++;
-            attribs.style = styleText;
-        }
-
-        // Appends the "length" information to the object.
-        attribs._length = length;
-
-        // Return it, saving it to the next request.
-        return (styleDefinition._AC = attribs);
-    };
-
-    // Compare two bunch of styles, with the speciality that value 'inherit'
-    // is treated as a wildcard which will match any value.
-    // @param {Object/String} source
-    // @param {Object/String} target
-    function compareCssText(source, target) {
-        if (typeof source == 'string') {
-            source = CKEDITOR.tools.parseCssText(source);
-        }
-        if (typeof target == 'string') {
-            target = CKEDITOR.tools.parseCssText(target, true);
-        }
-
-        for (var name in source) {
-            if (/^\d/.test(target[name])) { //If it's a digit
-                target[name] = target[name].match(/\d+/)[0]; //Retrieving the numeric part
-                source[name] = source[name].match(/\d+/)[0];
-                if (!(name in target && (target[name] == source[name] || source[name] == 'inherit' || target[name] == 'inherit')))
-                    return false;
-            } else {
-                if (!(name in target && (target[name].toLowerCase().indexOf(source[name]) >= 0 || source[name] == 'inherit' || target[name] == 'inherit')))
-                    return false;
-            }
-        }
-        return true;
-    };
-
-    CKEDITOR.plugins.add('font', {
+    CKEDITOR.plugins.add( 'font', {
         requires: 'richcombo',
         // jscs:disable maximumLineLength
-        lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,el,en,en-au,en-ca,en-gb,eo,es,et,eu,fa,fi,fo,fr,fr-ca,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt,pt-br,ro,ru,si,sk,sl,sq,sr,sr-latn,sv,th,tr,tt,ug,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%
+        lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,de-ch,el,en,en-au,en-ca,en-gb,eo,es,et,eu,fa,fi,fo,fr,fr-ca,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt,pt-br,ro,ru,si,sk,sl,sq,sr,sr-latn,sv,th,tr,tt,ug,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%
         // jscs:enable maximumLineLength
-        init: function(editor) {
+        init: function( editor ) {
             var config = editor.config;
 
-            addCombo(editor, 'Font', 'family', editor.lang.font, config.font_names, config.font_defaultLabel, config.font_style, 30);
-            addCombo(editor, 'FontSize', 'size', editor.lang.font.fontSize, config.fontSize_sizes, config.fontSize_defaultLabel, config.fontSize_style, 40);
+            addCombo( editor, 'Font', 'family', editor.lang.font, config.font_names, config.font_defaultLabel, config.font_style, 30 );
+            addCombo( editor, 'FontSize', 'size', editor.lang.font.fontSize, config.fontSize_sizes, config.fontSize_defaultLabel, config.fontSize_style, 40 );
         }
-    });
-})();
+    } );
+} )();
 
 /**
  * The list of fonts names to be displayed in the Font combo in the toolbar.
