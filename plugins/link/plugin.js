@@ -61,12 +61,12 @@
 				allowedContent: allowed,
 				requiredContent: required
 			} ) );
-			// editor.addCommand( 'anchor', new CKEDITOR.dialogCommand( 'anchor', {
-			// 	allowedContent: 'a[!name,id]',
-			// 	requiredContent: 'a[name]'
-			// } ) );
+			editor.addCommand( 'anchor', new CKEDITOR.dialogCommand( 'anchor', {
+				allowedContent: 'a[!name,id]',
+				requiredContent: 'a[name]'
+			} ) );
 			editor.addCommand( 'unlink', new CKEDITOR.unlinkCommand() );
-			//editor.addCommand( 'removeAnchor', new CKEDITOR.removeAnchorCommand() );
+			editor.addCommand( 'removeAnchor', new CKEDITOR.removeAnchorCommand() );
 
 			editor.setKeystroke( CKEDITOR.CTRL + 76 /*L*/, 'link' );
 
@@ -81,15 +81,15 @@
 					command: 'unlink',
 					toolbar: 'links,20'
 				} );
-				// editor.ui.addButton( 'Anchor', {
-				// 	label: editor.lang.link.anchor.toolbar,
-				// 	command: 'anchor',
-				// 	toolbar: 'links,30'
-				// } );
+				editor.ui.addButton( 'Anchor', {
+					label: editor.lang.link.anchor.toolbar,
+					command: 'anchor',
+					toolbar: 'links,30'
+				} );
 			}
 
 			CKEDITOR.dialog.add( 'link', this.path + 'dialogs/link.js' );
-			//CKEDITOR.dialog.add( 'anchor', this.path + 'dialogs/anchor.js' );
+			CKEDITOR.dialog.add( 'anchor', this.path + 'dialogs/anchor.js' );
 
 			editor.on( 'doubleclick', function( evt ) {
 				var element = CKEDITOR.plugins.link.getSelectedLink( editor ) || evt.data.element;
@@ -116,19 +116,19 @@
 			// If the "menu" plugin is loaded, register the menu items.
 			if ( editor.addMenuItems ) {
 				editor.addMenuItems( {
-					// anchor: {
-					// 	label: editor.lang.link.anchor.menu,
-					// 	command: 'anchor',
-					// 	group: 'anchor',
-					// 	order: 1
-					// },
+					anchor: {
+						label: editor.lang.link.anchor.menu,
+						command: 'anchor',
+						group: 'anchor',
+						order: 1
+					},
 
-					// removeAnchor: {
-					// 	label: editor.lang.link.anchor.remove,
-					// 	command: 'removeAnchor',
-					// 	group: 'anchor',
-					// 	order: 5
-					// },
+					removeAnchor: {
+						label: editor.lang.link.anchor.remove,
+						command: 'removeAnchor',
+						group: 'anchor',
+						order: 5
+					},
 
 					link: {
 						label: editor.lang.link.menu,
