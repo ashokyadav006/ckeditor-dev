@@ -947,6 +947,11 @@
 					delete image.attributes[ d ];
 			}
 
+			//Remove style attribute from image
+			if(image.attributes.style) {
+				delete image.attributes.style;
+			}
+			
 			return el;
 		};
 	}
