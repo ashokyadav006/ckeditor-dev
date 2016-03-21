@@ -6,7 +6,13 @@ CKEDITOR.plugins.add( 'annotation', {
                 ranges = sel.getRanges(),
                 selectionIsEmpty = sel.getType() == CKEDITOR.SELECTION_NONE || ( ranges.length == 1 && ranges[ 0 ].collapsed );
                 if(!selectionIsEmpty) {
-                    var ourStyle = new CKEDITOR.style({element: 'span', attributes: {'class': '$${NEW_COMMENT_ID_HERE}'}});
+                    var ourStyle = new CKEDITOR.style({
+                        element: 'span', 
+                        attributes: {
+                            'class': '$${NEW_COMMENT_ID_HERE}',
+                            'data-type': 'comments'
+                        }
+                    });
         		    editor.applyStyle(ourStyle);
                 }
 
