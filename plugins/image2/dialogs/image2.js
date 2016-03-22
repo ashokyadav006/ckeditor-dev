@@ -347,10 +347,15 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 				id: 'src',
 				type: 'text',
 				label: commonLang.url,
-				onKeyup: onChangeSrc,
-				onChange: onChangeSrc,
+				//onKeyup: onChangeSrc,
+				//onChange: onChangeSrc,
 				setup: function( widget ) {
 					this.setValue( widget.data.src );
+					//Set element as read only
+					var ele = this.getInputElement().$;
+					if(ele) {
+						ele.readOnly = true;
+					}
 				},
 				commit: function( widget ) {
 					widget.setData( 'src', this.getValue() );
