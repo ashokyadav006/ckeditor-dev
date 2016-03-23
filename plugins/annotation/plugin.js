@@ -30,18 +30,18 @@ CKEDITOR.plugins.add( 'annotation', {
             icon: this.path + 'annotation.png'
         });
 
-        if(editor.contextMenu) {
-            editor.addMenuGroup('annoteGroup');
-            editor.addMenuItem('annoteItem', {
-                label: 'Add Comment',
-                icon: this.path+'annotation.png',
-                command: 'annotation',
-                group: 'annoteGroup'
-            });
+        // if(editor.contextMenu) {
+        //     editor.addMenuGroup('annoteGroup');
+        //     editor.addMenuItem('annoteItem', {
+        //         label: 'Add Comment',
+        //         icon: this.path+'annotation.png',
+        //         command: 'annotation',
+        //         group: 'annoteGroup'
+        //     });
 
-            editor.contextMenu.addListener(function() {
-                return {annoteItem: CKEDITOR.TRISTATE_OFF};
-            });
-        }
+        //     editor.contextMenu.addListener(function() {
+        //         return {annoteItem: CKEDITOR.TRISTATE_OFF};
+        //     });
+        // }
     }
 });
