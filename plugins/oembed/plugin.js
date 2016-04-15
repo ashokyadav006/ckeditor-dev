@@ -85,11 +85,13 @@
                             maxWidth: this.element.data('maxWidth') || 560,
                             maxHeight: this.element.data('maxHeight') || 315,
                             align: this.element.data('align') || 'none',
-                            oembed_provider: this.element.data('oembed_provider') || ''
+                            oembed_provider: this.element.data('oembed-provider') || ''
                         };
 
                         this.setData(data);
-                        this.element.addClass('oembed-provider-' + data.oembed_provider);
+                        if(data.oembed_provider) {
+                            this.element.addClass('oembed-provider-' + data.oembed_provider);
+                        }
 
                         this.on('dialog', function(evt) {
                             evt.data.widget = this;
@@ -182,7 +184,7 @@
 
                                 widget.element.appendHtml(e.code);
                                 widget.element.data('oembed', url);
-                                widget.element.data('oembed_provider', provider.name);
+                                widget.element.data('oembed-provider', provider.name);
                                 widget.element.addClass('oembed-provider-' + provider.name);
 
                                 elementAdded = true;
@@ -194,7 +196,7 @@
 
                                 widget.element.appendHtml(e.code[0].outerHTML);
                                 widget.element.data('oembed', url);
-                                widget.element.data('oembed_provider', provider.name);
+                                widget.element.data('oembed-provider', provider.name);
                                 widget.element.addClass('oembed-provider-' + provider.name);
 
                                 elementAdded = true;

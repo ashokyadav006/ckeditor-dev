@@ -31,7 +31,7 @@ var CKBUILDER_CONFIG = {
 		'tests'
 	],
 	plugins: {
-		//acronym: 1,
+		acronym: 1,
 		annotation: 1,
 		basicstyles: 1,
 		clipboard: 1,
@@ -62,7 +62,7 @@ var CKBUILDER_CONFIG = {
 		maximize: 1,
 		notification: 1,
 		notificationaggregator: 1,
-		oembed: 1,
+		//oembed: 1,
 		pagebreak: 1,
 		pastefromword: 1,
 		pastetext: 1,
