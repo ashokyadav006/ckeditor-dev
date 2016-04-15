@@ -306,7 +306,7 @@ CKEDITOR.config.fontSize_defaultLabel = '';
  *		config.fontSize_style = {
  *			element:		'span',
  *			styles:			{ 'font-size': '#(size)' },
- *			overrides:		[ { element :'font', attributes: { 'size': null } } ]
+ *			overrides:		[ { element: 'font', attributes: { 'size': null } } ]
  *		};
  *
  * @cfg {Object} [fontSize_style=see example]
