@@ -62,7 +62,7 @@ var CKBUILDER_CONFIG = {
 		maximize: 1,
 		notification: 1,
 		notificationaggregator: 1,
-		//oembed: 1,
+		oembed: 1,
 		pagebreak: 1,
 		pastefromword: 1,
 		pastetext: 1,
