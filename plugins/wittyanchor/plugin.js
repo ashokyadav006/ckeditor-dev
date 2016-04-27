@@ -119,7 +119,8 @@
                         });
 
                         function associateAnchorToWit(anchor) {
-                            witReferenceFactory.addWitAnchor(anchor);
+                            var content = editor.getData();
+                            witReferenceFactory.addWitAnchor(anchor, content);
                         }
 
                         function copyContent(anchor) {
