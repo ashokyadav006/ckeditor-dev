@@ -95,7 +95,8 @@
                 //Get the angular injector to invoke dialog factory to open 
                 //our custom dialog
                 injector.invoke(['dialogFactory', 'witReferenceFactory','$stateParams', 'appPopupFactory',
-                    function(dialogFactory, witReferenceFactory,$stateParams, appPopupFactory) {
+                    'editorUtil',
+                    function(dialogFactory, witReferenceFactory,$stateParams, appPopupFactory, editorUtil) {
                         var witId = $stateParams.witId || $stateParams.id;
                         if(!witId) {
                             appPopupFactory.showSimpleToast('Please save wit first to add anchors');
@@ -119,7 +120,7 @@
                         });
 
                         function associateAnchorToWit(anchor) {
-                            var content = editor.getData();
+                            var content = editorUtil.getFilteredContent();
                             witReferenceFactory.addWitAnchor(anchor, content);
                         }
 
