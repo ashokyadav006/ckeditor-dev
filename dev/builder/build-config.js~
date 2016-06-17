@@ -78,6 +78,7 @@ var CKBUILDER_CONFIG = {
 		uploadwidget: 1,
 		quicktable: 1,
 		widget: 1,
+		wittyanchor: 1,
 		wittyprint: 1,
 		wittyupload: 1
 	}
