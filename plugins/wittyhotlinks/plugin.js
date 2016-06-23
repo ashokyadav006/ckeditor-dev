@@ -7,19 +7,19 @@ CKEDITOR.plugins.add('wittyhotlinks', {
             defaults: {
                 hotlinkName: '',
                 hotlink: '',
-                hotlinkId: ''
+                hotlinkId: '',
+                target: ''
             },
             data: function() {
                 this.element.setText(this.data.hotlinkName);
                 this.element.setAttribute('href', this.data.hotlink);
                 this.element.setAttribute('hotlink-id', this.data.hotlinkId);
+                this.element.setAttribute('target', this.data.target);
             },
             template: '<a class="witty-hot-links">' +
                 '</a>',
             init: function() {
                 var widget = this;
-
-
                 widget.on('doubleclick', function(evt) {
                     evt.cancel();
                     var injector = angular.element(document).injector();
@@ -51,13 +51,11 @@ CKEDITOR.plugins.add('wittyhotlinks', {
             edit: function(evt) {
                 evt.cancel();
                 var widget = this;
-                var selectedText;
                 //Set selected text as hotlink name if there is any
                 if(editor.getSelection()) {
-                    seletedText = editor.getSelection().getSelectedText();
+                  var seletedText = editor.getSelection().getSelectedText();
                     widget.setData('hotlinkName', seletedText);
                 }
-
                 var injector = angular.element(document).injector();
                 injector.invoke(['dialogFactory', 'appPopupFactory',
                     function(dialogFactory, appPopupFactory) {
@@ -68,6 +66,11 @@ CKEDITOR.plugins.add('wittyhotlinks', {
                                 }
                                 widget.setData('hotlinkId', hotlinkObj.id);
                                 widget.setData('hotlink', hotlinkObj.shortenedUrl);
+                                if(hotlinkObj.hasOwnProperty('targetAttrib')){
+                                  widget.setData('target', hotlinkObj.targetAttrib);
+                                }else{
+                                  widget.setData('target', '_blank');
+                                }
                                 referContent(hotlinkObj);
                                 appPopupFactory.showSimpleToast('Inserted hotlink "' + hotlinkObj.name + '"');
                             }
