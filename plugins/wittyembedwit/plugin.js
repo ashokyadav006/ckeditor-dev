@@ -7,6 +7,7 @@
             defaults: {
                 embedId: ''
             },
+            draggable: false,
             data: function() {
                 addWitPreview({id: this.data.embedId}, true);
             },  
@@ -56,7 +57,7 @@
                     if (ev === true) {
                         var embedWit = editorUtil.embedWitExist(wit.id);
                         if (embedWit) {
-                            generateWitPreview(embedWit);
+                            generateWitPreview(embedWit, true);
                         }
                     } else {// We are dragging and dropping wit
                         if (editorUtil.embedWitExist(wit.id)) {
@@ -83,7 +84,7 @@
                     }
                     
 
-                    function generateWitPreview(witData) {
+                    function generateWitPreview(witData, existingWit) {
                         var compiledHTML = witContentPreviewService.generateContentPreview(witData);
                         var $editor = document.getElementsByTagName('witty-editor')[0];
 
@@ -92,17 +93,18 @@
                             witContainerWidget.appendChild(compiledHTML[0]);
                         }
 
+                        if(!existingWit) {
+                            editorUtil.addEmbedWit(wit.id);
 
-                        editorUtil.addEmbedWit(wit.id);
+                            //Adding one extra line so that cursor moves to new line
+                            setTimeout(function() {
+                                var range = editor.createRange();
+                                range.moveToPosition( range.root, CKEDITOR.POSITION_BEFORE_END );
+                                editor.getSelection().selectRanges([ range ]);
 
-                        //Adding one extra line so that cursor moves to new line
-                        setTimeout(function() {
-                            var range = editor.createRange();
-                            range.moveToPosition( range.root, CKEDITOR.POSITION_BEFORE_END );
-                            editor.getSelection().selectRanges([ range ]);
-
-                            editor.execCommand('enter');
-                        }, 400);
+                                editor.execCommand('enter');
+                            }, 400);
+                        }
                     }
                     
             }]);
