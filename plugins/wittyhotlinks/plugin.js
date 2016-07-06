@@ -64,6 +64,9 @@ CKEDITOR.plugins.add('wittyhotlinks', {
                                 if(!widget.data.hotlinkName) {
                                     widget.setData('hotlinkName', hotlinkObj.name);
                                 }
+                                if(hotlinkObj.insertShortenedUrl){
+                                    widget.setData('hotlinkName', hotlinkObj.shortenedUrl);
+                                }
                                 widget.setData('hotlinkId', hotlinkObj.id);
                                 widget.setData('hotlink', hotlinkObj.shortenedUrl);
                                 if(hotlinkObj.hasOwnProperty('targetAttrib')){
@@ -72,7 +75,12 @@ CKEDITOR.plugins.add('wittyhotlinks', {
                                   widget.setData('target', '_blank');
                                 }
                                 referContent(hotlinkObj);
-                                appPopupFactory.showSimpleToast('Inserted hotlink "' + hotlinkObj.name + '"');
+                                if(hotlinkObj.insertShortenedUrl){
+                                    appPopupFactory.showSimpleToast('Inserted hotlink "' + hotlinkObj.shortenedUrl + '"');
+                                }else{
+                                  appPopupFactory.showSimpleToast('Inserted hotlink "' + hotlinkObj.name + '"');
+                                }
+
                             }
                         });
 
