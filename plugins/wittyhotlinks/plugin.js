@@ -85,7 +85,6 @@ CKEDITOR.plugins.add('wittyhotlinks', {
                                 }else{
                                   appPopupFactory.showSimpleToast('Inserted hotlink "' + hotlinkObj.name + '"');
                                 }
-
                             }
                         });
 
