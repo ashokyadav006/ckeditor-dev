@@ -11,10 +11,10 @@ CKEDITOR.plugins.add('wittyhotlinks', {
                 target: ''
             },
             data: function() {
-                this.element.setText(this.data.hotlinkName);
-                this.element.setAttribute('href', this.data.hotlink);
-                this.element.setAttribute('hotlink-id', this.data.hotlinkId);
-                this.element.setAttribute('target', this.data.target);
+                //this.element.setText(this.data.hotlinkName);
+                //this.element.setAttribute('href', this.data.hotlink);
+               //this.element.setAttribute('hotlink-id', this.data.hotlinkId);
+                //this.element.setAttribute('target', this.data.target);
             },
             template: '<a class="witty-hot-links">' +
                 '</a>',
@@ -38,15 +38,15 @@ CKEDITOR.plugins.add('wittyhotlinks', {
                 }, null, null, 5);
             },
             upcast: function(element, data) {
-                var shouldUpcast = false;
-                if (element.name === 'a' && element.hasClass('witty-hot-links')) {
-                    shouldUpcast = true;
-                    var attributes = element.attributes;
-                    data.hotlinkName = element.getHtml();
-                    data.hotlink = attributes.href;
-                    data.hotlinkId = attributes['hotlink-id'];
-                }
-                return shouldUpcast;
+                // var shouldUpcast = false;
+                // if (element.name === 'a' && element.hasClass('witty-hot-links')) {
+                //     shouldUpcast = true;
+                //     var attributes = element.attributes;
+                //     data.hotlinkName = element.getHtml();
+                //     data.hotlink = attributes.href;
+                //     data.hotlinkId = attributes['hotlink-id'];
+                // }
+                // return shouldUpcast;
             },
             edit: function(evt) {
                 evt.cancel();
@@ -60,19 +60,32 @@ CKEDITOR.plugins.add('wittyhotlinks', {
                 injector.invoke(['dialogFactory', 'appPopupFactory',
                     function(dialogFactory, appPopupFactory) {
                         dialogFactory.showHotlinksListDialog({
-                            insertHotlink: function(hotlinkObj) {
+                            insertHotlink: function(hotlinkObj) { 
                                 if(!widget.data.hotlinkName) {
                                     widget.setData('hotlinkName', hotlinkObj.name);
                                 }
-                                widget.setData('hotlinkId', hotlinkObj.id);
-                                widget.setData('hotlink', hotlinkObj.shortenedUrl);
-                                if(hotlinkObj.hasOwnProperty('targetAttrib')){
-                                  widget.setData('target', hotlinkObj.targetAttrib);
+
+                                var link = '<a class="witty-hot-links" href="'+hotlinkObj.shortenedUrl+'">'+widget.data.hotlinkName+'</a>';
+
+                                editor.insertHtml(link);
+
+                                // if(hotlinkObj.insertShortenedUrl){
+                                //     widget.setData('hotlinkName', hotlinkObj.shortenedUrl);
+                                // }
+                                // widget.setData('hotlinkId', hotlinkObj.id);
+                                // widget.setData('hotlink', hotlinkObj.shortenedUrl);
+                                // if(hotlinkObj.hasOwnProperty('targetAttrib')){
+                                //   widget.setData('target', hotlinkObj.targetAttrib);
+                                // }else{
+                                //   widget.setData('target', '_blank');
+                                // }
+                                //referContent(hotlinkObj);
+                                if(hotlinkObj.insertShortenedUrl){
+                                    appPopupFactory.showSimpleToast('Inserted hotlink "' + hotlinkObj.shortenedUrl + '"');
                                 }else{
-                                  widget.setData('target', '_blank');
+                                  appPopupFactory.showSimpleToast('Inserted hotlink "' + hotlinkObj.name + '"');
                                 }
-                                referContent(hotlinkObj);
-                                appPopupFactory.showSimpleToast('Inserted hotlink "' + hotlinkObj.name + '"');
+
                             }
                         });
 

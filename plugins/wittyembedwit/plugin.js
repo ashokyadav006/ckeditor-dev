@@ -38,9 +38,9 @@
                         event.cancel();
                         return;
                     }
-
-                    event.data.dataValue = '<div embed-wit-id='+wit.id+' class="embed-wit"></div>';
-                    addWitPreview(wit, event);
+                    event.data.dataValue = '';
+                    //event.data.dataValue = '<div embed-wit-id='+wit.id+' class="embed-wit"></div>';
+                    //addWitPreview(wit, event);
                 }               
             }
         });

@@ -12,10 +12,18 @@
                 isWidget: false
             },
             data: function() {
+                var widget = this;
                 var acroText = this.data.acroText;
                 this.element.setAttribute('var', acroText);
                 this.element.setAttribute('data-default', this.data.defaultText);
                 this.element.setText('['+acroText+']');
+
+                var injector = angular.element(document).injector();
+                //Get the angular injector to invoke dialog factory to open 
+                //our custom dialog
+                injector.invoke(['editorUtil', function(editorUtil) {
+                    editorUtil.addAcronym({name: widget.data.acroText, defaultValue: widget.data.defaultText});
+                }]);
             },
             template:
                 '<span id="var_acronym" style="color:rgb(236, 27, 82)">'+
