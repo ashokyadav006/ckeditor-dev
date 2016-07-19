@@ -79,7 +79,7 @@ var CKBUILDER_CONFIG = {
 		quicktable: 1,
 		widget: 1,
 		wittyanchor: 1,
-		wittyembedwit: 1,
+		//wittyembedwit: 1,
 		wittyhotlinks: 1,
 		wittyprint: 1,
 		wittyupload: 1		
