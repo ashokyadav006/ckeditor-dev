@@ -80,6 +80,7 @@ var CKBUILDER_CONFIG = {
 		widget: 1,
 		wittyanchor: 1,
 		wittyembedwit: 1,
+		wittyemailembedwit: 1,
 		wittyhotlinks: 1,
 		wittyprint: 1,
 		wittyupload: 1,
